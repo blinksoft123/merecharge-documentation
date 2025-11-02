@@ -1,0 +1,378 @@
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Vue d'ensemble de votre plateforme MeRecharge</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary">
+                <i class="fas fa-download me-2"></i>Exporter
+            </button>
+            <button class="btn btn-primary">
+                <i class="fas fa-sync me-2"></i>Actualiser
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistiques principales -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +12.5%
+                    </div>
+                </div>
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Utilisateurs Actifs</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div class="stat-icon success">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +8.2%
+                    </div>
+                </div>
+                <div class="stat-value">856</div>
+                <div class="stat-label">Transactions Aujourd'hui</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card warning">
+                <div class="stat-header">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +23.1%
+                    </div>
+                </div>
+                <div class="stat-value">2.4M</div>
+                <div class="stat-label">Revenus (FCFA)</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card danger">
+                <div class="stat-header">
+                    <div class="stat-icon danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        -3.2%
+                    </div>
+                </div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Transactions Échouées</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Graphique des transactions -->
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Analyse des Transactions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 350px; position: relative;">
+                        <canvas id="transactionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Services populaires -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        <i class="fas fa-fire me-2"></i>
+                        Services Populaires
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: rgba(99, 102, 241, 0.1);">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle p-2" style="background: var(--primary); color: white;">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Orange Credit</div>
+                                    <small class="text-muted">Recharge de crédit</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">456</div>
+                                <small class="text-success">+15%</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: rgba(16, 185, 129, 0.1);">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle p-2" style="background: var(--success); color: white;">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">MTN Data</div>
+                                    <small class="text-muted">Forfaits internet</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">234</div>
+                                <small class="text-success">+8%</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: rgba(245, 158, 11, 0.1);">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle p-2" style="background: var(--warning); color: white;">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">ENEO Bills</div>
+                                    <small class="text-muted">Factures électricité</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">89</div>
+                                <small class="text-success">+3%</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions récentes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="table-container">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">
+                            <i class="fas fa-clock me-2"></i>
+                            Transactions Récentes
+                        </h5>
+                        <a href="/transactions" class="btn btn-primary btn-sm">
+                            <i class="fas fa-arrow-right me-2"></i>Voir toutes
+                        </a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID Transaction</th>
+                                        <th>Utilisateur</th>
+                                        <th>Service</th>
+                                        <th>Montant</th>
+                                        <th>Statut</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">TXN001234</div>
+                                            <small class="text-muted">REF78945612</small>
+                                        </td>
+                                        <td>+237 678 901 234</td>
+                                        <td>
+                                            <span class="badge badge-info">
+                                                <i class="fas fa-mobile-alt me-1"></i>
+                                                Orange Credit
+                                            </span>
+                                        </td>
+                                        <td class="fw-bold">5,000 FCFA</td>
+                                        <td>
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-check me-1"></i>
+                                                Succès
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div>14:32</div>
+                                            <small class="text-muted">Il y a 2 min</small>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">TXN001233</div>
+                                            <small class="text-muted">REF78945611</small>
+                                        </td>
+                                        <td>+237 699 123 456</td>
+                                        <td>
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-wifi me-1"></i>
+                                                MTN Data
+                                            </span>
+                                        </td>
+                                        <td class="fw-bold">2,000 FCFA</td>
+                                        <td>
+                                            <span class="badge badge-warning">
+                                                <i class="fas fa-clock me-1"></i>
+                                                En attente
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div>14:27</div>
+                                            <small class="text-muted">Il y a 5 min</small>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">TXN001232</div>
+                                            <small class="text-muted">REF78945610</small>
+                                        </td>
+                                        <td>+237 690 789 012</td>
+                                        <td>
+                                            <span class="badge badge-warning">
+                                                <i class="fas fa-bolt me-1"></i>
+                                                ENEO Bills
+                                            </span>
+                                        </td>
+                                        <td class="fw-bold">15,000 FCFA</td>
+                                        <td>
+                                            <span class="badge badge-danger">
+                                                <i class="fas fa-times me-1"></i>
+                                                Échoué
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div>14:20</div>
+                                            <small class="text-muted">Il y a 12 min</small>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Graphique des transactions
+const ctx = document.getElementById('transactionsChart').getContext('2d');
+const transactionsChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
+        datasets: [{
+            label: 'Transactions Réussies',
+            data: [120, 190, 300, 250, 200, 350, 400],
+            borderColor: 'rgb(99, 102, 241)',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: 'rgb(99, 102, 241)',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 6
+        }, {
+            label: 'Transactions Échouées',
+            data: [8, 12, 15, 10, 8, 20, 12],
+            borderColor: 'rgb(239, 68, 68)',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: 'rgb(239, 68, 68)',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                        size: 12,
+                        weight: '500'
+                    }
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                cornerRadius: 8,
+                padding: 12
+            }
+        },
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    font: {
+                        size: 12
+                    },
+                    color: '#64748b'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(100, 116, 139, 0.1)'
+                },
+                ticks: {
+                    font: {
+                        size: 12
+                    },
+                    color: '#64748b'
+                }
+            }
+        },
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        }
+    }
+});
+</script>

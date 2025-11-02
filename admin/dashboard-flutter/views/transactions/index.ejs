@@ -1,0 +1,362 @@
+<div class="fade-in">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2"><i class="fas fa-exchange-alt me-2"></i>Gestion des transactions</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-success me-2" onclick="exportTransactions()">
+                <i class="fas fa-download me-2"></i>Exporter
+            </button>
+            <button type="button" class="btn btn-primary" onclick="refreshData()">
+                <i class="fas fa-sync me-2"></i>Actualiser
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Transactions
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.total_count.toLocaleString() %></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Montant Total (FCFA)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.total_amount.toLocaleString() %></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Succès
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.success_count.toLocaleString() %></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Frais (FCFA)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.total_fees.toLocaleString() %></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-percentage fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-filter me-2"></i>Filtres
+            </h6>
+        </div>
+        <div class="card-body">
+            <form method="GET" id="filtersForm">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Statut</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">Tous</option>
+                                <option value="SUCCESS" <%= filters.status === 'SUCCESS' ? 'selected' : '' %>>Succès</option>
+                                <option value="PENDING" <%= filters.status === 'PENDING' ? 'selected' : '' %>>En attente</option>
+                                <option value="FAILED" <%= filters.status === 'FAILED' ? 'selected' : '' %>>Échoué</option>
+                                <option value="CANCELLED" <%= filters.status === 'CANCELLED' ? 'selected' : '' %>>Annulé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="service" class="form-label">Service</label>
+                            <select class="form-select" id="service" name="service">
+                                <option value="">Tous</option>
+                                <option value="ORANGE_TOPUP" <%= filters.service === 'ORANGE_TOPUP' ? 'selected' : '' %>>Orange Topup</option>
+                                <option value="MTN_TOPUP" <%= filters.service === 'MTN_TOPUP' ? 'selected' : '' %>>MTN Topup</option>
+                                <option value="MOOV_TOPUP" <%= filters.service === 'MOOV_TOPUP' ? 'selected' : '' %>>Moov Topup</option>
+                                <option value="DATA_BUNDLE" <%= filters.service === 'DATA_BUNDLE' ? 'selected' : '' %>>Data Bundle</option>
+                                <option value="BILL_PAYMENT" <%= filters.service === 'BILL_PAYMENT' ? 'selected' : '' %>>Paiement factures</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="search" class="form-label">Recherche</label>
+                            <input type="text" class="form-control" id="search" name="search" value="<%= filters.search %>" placeholder="ID, Réf, Tél...">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="date_from" class="form-label">Date début</label>
+                            <input type="date" class="form-control" id="date_from" name="date_from" value="<%= filters.date_from %>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="date_to" class="form-label">Date fin</label>
+                            <input type="date" class="form-control" id="date_to" name="date_to" value="<%= filters.date_to %>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">&nbsp;</label>
+                            <div>
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="fas fa-search me-1"></i>Filtrer
+                                </button>
+                                <a href="/transactions" class="btn btn-secondary">
+                                    <i class="fas fa-times me-1"></i>Reset
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des transactions -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-table me-2"></i>Transactions (<%= pagination.total_records %> résultats)
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="transactionsTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Utilisateur</th>
+                            <th>Service</th>
+                            <th>Opérateur</th>
+                            <th>Montant</th>
+                            <th>Frais</th>
+                            <th>Total</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (transactions && transactions.length > 0) { %>
+                            <% transactions.forEach(transaction => { %>
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold"><%= transaction.id %></span>
+                                        <br><small class="text-muted"><%= transaction.reference %></small>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span><%= transaction.user_phone %></span>
+                                            <small class="text-muted">vers <%= transaction.recipient_phone %></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info"><%= transaction.service.replace('_', ' ') %></span>
+                                    </td>
+                                    <td><%= transaction.operator %></td>
+                                    <td><%= transaction.amount.toLocaleString() %> FCFA</td>
+                                    <td><%= transaction.fees.toLocaleString() %> FCFA</td>
+                                    <td class="fw-bold"><%= transaction.total.toLocaleString() %> FCFA</td>
+                                    <td>
+                                        <% if (transaction.status === 'SUCCESS') { %>
+                                            <span class="badge bg-success">Succès</span>
+                                        <% } else if (transaction.status === 'PENDING') { %>
+                                            <span class="badge bg-warning">En attente</span>
+                                        <% } else if (transaction.status === 'FAILED') { %>
+                                            <span class="badge bg-danger">Échoué</span>
+                                        <% } else { %>
+                                            <span class="badge bg-secondary"><%= transaction.status %></span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span><%= transaction.created_at.toLocaleDateString('fr-FR') %></span>
+                                            <small class="text-muted"><%= transaction.created_at.toLocaleTimeString('fr-FR') %></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="viewTransaction('<%= transaction.id %>')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <% if (transaction.status === 'PENDING') { %>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="cancelTransaction('<%= transaction.id %>')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="10" class="text-center py-4">
+                                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Aucune transaction trouvée</p>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if (pagination.total_pages > 1) { %>
+                <nav aria-label="Pagination des transactions">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <%= !pagination.has_prev ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= pagination.current_page - 1 %>&status=<%= filters.status %>&service=<%= filters.service %>&search=<%= filters.search %>&date_from=<%= filters.date_from %>&date_to=<%= filters.date_to %>">
+                                <i class="fas fa-chevron-left"></i> Précédent
+                            </a>
+                        </li>
+                        
+                        <% for (let i = Math.max(1, pagination.current_page - 2); i <= Math.min(pagination.total_pages, pagination.current_page + 2); i++) { %>
+                            <li class="page-item <%= i === pagination.current_page ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>&status=<%= filters.status %>&service=<%= filters.service %>&search=<%= filters.search %>&date_from=<%= filters.date_from %>&date_to=<%= filters.date_to %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        
+                        <li class="page-item <%= !pagination.has_next ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= pagination.current_page + 1 %>&status=<%= filters.status %>&service=<%= filters.service %>&search=<%= filters.search %>&date_from=<%= filters.date_from %>&date_to=<%= filters.date_to %>">
+                                Suivant <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <div class="text-center text-muted">
+                    Affichage <%= (pagination.current_page - 1) * pagination.per_page + 1 %> - <%= Math.min(pagination.current_page * pagination.per_page, pagination.total_records) %> sur <%= pagination.total_records %> transactions
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshData() {
+    window.location.reload();
+}
+
+function exportTransactions() {
+    // Implémenter l'export des transactions
+    const exportModal = new bootstrap.Modal(document.getElementById('exportModal') || createExportModal());
+    exportModal.show();
+}
+
+function createExportModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.id = 'exportModal';
+    modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Exporter les transactions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="exportForm">
+                        <div class="mb-3">
+                            <label class="form-label">Format d'export</label>
+                            <select class="form-select" name="format" required>
+                                <option value="csv">CSV</option>
+                                <option value="excel">Excel</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Période</label>
+                            <div class="row">
+                                <div class="col">
+                                    <input type="date" class="form-control" name="date_from" placeholder="Date début">
+                                </div>
+                                <div class="col">
+                                    <input type="date" class="form-control" name="date_to" placeholder="Date fin">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Statut</label>
+                            <select class="form-select" name="status">
+                                <option value="">Tous</option>
+                                <option value="SUCCESS">Succès</option>
+                                <option value="PENDING">En attente</option>
+                                <option value="FAILED">Échoué</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="doExport()">Exporter</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function doExport() {
+    const form = document.getElementById('exportForm');
+    const formData = new FormData(form);
+    
+    // Simuler l'export
+    alert('Export en cours... Vous recevrez un email avec le fichier.');
+    bootstrap.Modal.getInstance(document.getElementById('exportModal')).hide();
+}
+
+function viewTransaction(id) {
+    // Ouvrir les détails de la transaction
+    window.open(`/transactions/${id}`, '_blank');
+}
+
+function cancelTransaction(id) {
+    if (confirm('Voulez-vous vraiment annuler cette transaction?')) {
+        // Implémenter l'annulation
+        alert('Transaction annulée (fonctionnalité à implémenter)');
+    }
+}
+</script>

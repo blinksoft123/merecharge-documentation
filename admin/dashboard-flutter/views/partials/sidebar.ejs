@@ -1,0 +1,109 @@
+<aside class="sidebar">
+    <!-- Header -->
+    <div class="sidebar-header">
+        <a href="/dashboard" class="sidebar-brand">
+            <i class="fas fa-bolt"></i>
+            <span class="sidebar-brand-text">MeRecharge</span>
+        </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+        <!-- Menu principal -->
+        <div class="nav-section">
+            <div class="nav-section-title">Menu principal</div>
+            
+            <div class="nav-item">
+                <a href="/dashboard" class="nav-link <%= title === 'Dashboard' ? 'active' : '' %>">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="/users" class="nav-link <%= title === 'Utilisateurs' || title === 'Gestion des utilisateurs' ? 'active' : '' %>">
+                    <i class="fas fa-users"></i>
+                    <span>Utilisateurs</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="/transactions" class="nav-link <%= title === 'Transactions' || title === 'Gestion des transactions' ? 'active' : '' %>">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transactions</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Gestion -->
+        <div class="nav-section">
+            <div class="nav-section-title">Gestion</div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Rapports</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Facturation</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Paramètres -->
+        <div class="nav-section">
+            <div class="nav-section-title">Paramètres</div>
+            
+            <div class="nav-item">
+                <a href="/config" class="nav-link <%= title === 'Configuration' || title === 'Configuration système' ? 'active' : '' %>">
+                    <i class="fas fa-cogs"></i>
+                    <span>Configuration</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Sécurité</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-life-ring"></i>
+                    <span>Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Compte -->
+        <div class="nav-section">
+            <div class="nav-section-title">Compte</div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Mon profil</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="/auth/logout" class="nav-link text-danger">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</aside>

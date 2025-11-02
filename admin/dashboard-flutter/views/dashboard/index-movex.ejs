@@ -1,0 +1,488 @@
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Transactions MeRecharge</h1>
+            <p class="page-subtitle">Gestion et suivi des transactions en temps réel</p>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="date-navigation">
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="current-date">7 Octobre 2025</span>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="view-toggle">
+                <button class="btn btn-primary btn-sm active">Aujourd'hui</button>
+                <button class="btn btn-outline-primary btn-sm">Semaine</button>
+            </div>
+            <button class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Nouvelle Transaction
+            </button>
+        </div>
+    </div>
+
+    <!-- Timeline Header -->
+    <div class="timeline-header">
+        <div class="timeline-title">
+            <div class="services-label">Services</div>
+        </div>
+        <div class="time-slots">
+            <div class="time-slot">09:00</div>
+            <div class="time-slot">10:00</div>
+            <div class="time-slot">11:00</div>
+            <div class="time-slot">12:00</div>
+            <div class="time-slot">13:00</div>
+            <div class="time-slot">14:00</div>
+            <div class="time-slot">15:00</div>
+            <div class="time-slot">16:00</div>
+            <div class="time-slot">17:00</div>
+        </div>
+    </div>
+
+    <!-- Transaction Timeline -->
+    <div class="transaction-timeline">
+        <!-- Orange Credit -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon orange">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">Orange Credit</div>
+                    <div class="service-status active">Actif • Crédit</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <div class="transaction-item success" style="left: 15%; width: 120px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Pierre Kamga</div>
+                        <div class="transaction-time">09:00 - 24 Déc 02:00 pm</div>
+                        <div class="transaction-duration">4 jours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MTN Data -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon green">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">MTN Data Bundle</div>
+                    <div class="service-status active">Actif • Internet</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <div class="transaction-item pending" style="left: 25%; width: 100px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Marie Fouda</div>
+                        <div class="transaction-time">10:00 - 23 Déc 03:00 pm</div>
+                        <div class="transaction-duration">3 jours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moov Money -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon blue">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">Moov Money Transfer</div>
+                    <div class="service-status active">Actif • Transfert</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <!-- Transaction en cours -->
+                <div class="transaction-item active" style="left: 35%; width: 80px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Jean Baptiste</div>
+                        <div class="transaction-time">11:30 - En cours</div>
+                        <div class="transaction-duration">2h</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camtel Bills -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon purple">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">Camtel Factures</div>
+                    <div class="service-status active">Actif • Factures</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <div class="transaction-item success" style="left: 45%; width: 90px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Sophie Mvondo</div>
+                        <div class="transaction-time">13:00 - 22 Déc 12:00 pm</div>
+                        <div class="transaction-duration">2 jours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENEO Bills -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon yellow">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">ENEO Électricité</div>
+                    <div class="service-status active">Actif • Factures</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <div class="transaction-item success" style="left: 55%; width: 110px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Paul Essomba</div>
+                        <div class="transaction-time">14:00 - 25 Déc 02:00 pm</div>
+                        <div class="transaction-duration">6 jours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canal+ -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon red">
+                    <i class="fas fa-tv"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">Canal+ Abonnement</div>
+                    <div class="service-status active">Actif • TV</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <div class="transaction-item pending" style="left: 65%; width: 95px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Alice Nkomo</div>
+                        <div class="transaction-time">15:00 - 28 Déc 02:00 pm</div>
+                        <div class="transaction-duration">5 jours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Express Union -->
+        <div class="service-row">
+            <div class="service-info">
+                <div class="service-icon indigo">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">Express Union</div>
+                    <div class="service-status active">Actif • Banque</div>
+                </div>
+            </div>
+            <div class="transaction-track">
+                <div class="transaction-item success" style="left: 70%; width: 85px;">
+                    <div class="transaction-content">
+                        <div class="transaction-user">Robert Manga</div>
+                        <div class="transaction-time">16:00 - 23 Déc 12:00 pm</div>
+                        <div class="transaction-duration">2 jours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Page Header Style Movex */
+.page-header {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+    color: var(--gray-500);
+    margin: 4px 0 0 0;
+    font-size: 14px;
+}
+
+.date-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--white);
+    padding: 8px 16px;
+    border-radius: var(--border-radius-xs);
+    border: 1px solid var(--gray-200);
+}
+
+.current-date {
+    font-weight: 500;
+    color: var(--gray-700);
+    font-size: 14px;
+    min-width: 120px;
+    text-align: center;
+}
+
+.view-toggle {
+    display: flex;
+    background: var(--gray-100);
+    padding: 4px;
+    border-radius: var(--border-radius-xs);
+}
+
+.view-toggle .btn {
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    margin: 0;
+}
+
+.view-toggle .btn.active {
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Timeline Header */
+.timeline-header {
+    display: flex;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.timeline-title {
+    width: 300px;
+    padding-left: 20px;
+}
+
+.services-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.time-slots {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.time-slot {
+    font-size: 12px;
+    color: var(--gray-500);
+    font-weight: 500;
+    text-align: center;
+    flex: 1;
+}
+
+/* Transaction Timeline */
+.transaction-timeline {
+    background: var(--white);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+}
+
+.service-row {
+    display: flex;
+    border-bottom: 1px solid var(--gray-100);
+    min-height: 80px;
+    position: relative;
+}
+
+.service-row:last-child {
+    border-bottom: none;
+}
+
+.service-info {
+    width: 300px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--gray-25);
+    border-right: 1px solid var(--gray-200);
+}
+
+.service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 16px;
+}
+
+.service-icon.orange { background: #ff6b35; }
+.service-icon.green { background: #10b981; }
+.service-icon.blue { background: #3b82f6; }
+.service-icon.purple { background: #8b5cf6; }
+.service-icon.yellow { background: #f59e0b; }
+.service-icon.red { background: #ef4444; }
+.service-icon.indigo { background: #6366f1; }
+
+.service-details {
+    flex: 1;
+}
+
+.service-name {
+    font-weight: 600;
+    color: var(--gray-900);
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.service-status {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+.service-status.active::before {
+    content: '●';
+    color: var(--success);
+    margin-right: 4px;
+}
+
+.transaction-track {
+    flex: 1;
+    position: relative;
+    padding: 16px 20px;
+}
+
+.transaction-item {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: var(--border-radius-xs);
+    padding: 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.transaction-item:hover {
+    transform: translateY(-50%) scale(1.02);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+.transaction-item.success {
+    background: #dcfdf7;
+    border: 1px solid #6ee7b7;
+    color: #065f46;
+}
+
+.transaction-item.pending {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    color: #92400e;
+}
+
+.transaction-item.active {
+    background: #ede9fe;
+    border: 1px solid #c4b5fd;
+    color: #5b21b6;
+}
+
+.transaction-content {
+    text-align: left;
+}
+
+.transaction-user {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.transaction-time {
+    font-size: 11px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+}
+
+.transaction-duration {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .service-info {
+        width: 250px;
+    }
+    
+    .time-slots {
+        padding: 0 10px;
+    }
+    
+    .transaction-item {
+        padding: 8px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .timeline-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .service-row {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .service-info {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .transaction-track {
+        padding: 16px;
+        min-height: 60px;
+    }
+    
+    .transaction-item {
+        position: relative;
+        width: 100% !important;
+        left: 0 !important;
+        top: 0;
+        transform: none;
+        margin-bottom: 8px;
+    }
+}
+</style>

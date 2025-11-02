@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeRecharge - Dashboard Admin</title>
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
+                <h2>MeRecharge</h2>
+            </div>
+            <span class="admin-badge">Admin</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#users" class="nav-link" data-section="users">
+                        <i class="fas fa-users"></i>
+                        <span>Utilisateurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#transactions" class="nav-link" data-section="transactions">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transactions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#recharges" class="nav-link" data-section="recharges">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Recharges</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#bundles" class="nav-link" data-section="bundles">
+                        <i class="fas fa-wifi"></i>
+                        <span>Forfaits</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#orders" class="nav-link" data-section="orders">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Commandes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#products" class="nav-link" data-section="products">
+                        <i class="fas fa-box"></i>
+                        <span>Produits</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#notifications" class="nav-link" data-section="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#reports" class="nav-link" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Rapports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#settings" class="nav-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button class="btn btn-danger" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Dashboard Overview</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-icon" id="themeToggle" title="Basculer thème">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <div class="firebase-status">
+                    <i class="fas fa-database status-icon" id="firebaseStatus"></i>
+                    <span id="firebaseStatusText">Firebase</span>
+                </div>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </div>
+                <div class="admin-profile">
+                    <img src="https://via.placeholder.com/32x32" alt="Admin" class="profile-img">
+                    <span class="admin-name">Administrateur</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Utilisateurs Actifs</p>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRecharges">0</h3>
+                            <p>Recharges Aujourd'hui</p>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+8%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRevenue">0 XAF</h3>
+                            <p>Revenus du Jour</p>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+15%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingOrders">0</h3>
+                            <p>Commandes Pendantes</p>
+                            <div class="trend negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>-3%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Transactions par Heure</h3>
+                            <select class="chart-period">
+                                <option>Aujourd'hui</option>
+                                <option>7 derniers jours</option>
+                                <option>30 derniers jours</option>
+                            </select>
+                        </div>
+                        <canvas id="transactionsChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Répartition des Services</h3>
+                        </div>
+                        <canvas id="servicesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h3>Activité Récente</h3>
+                    <div class="activity-list" id="activityList">
+                        <!-- Activities will be loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Utilisateurs 
+                        <span class="help-tooltip" data-tooltip="Gérez tous vos utilisateurs : modifier, activer, désactiver, bloquer ou supprimer. Utilisez la recherche pour trouver rapidement un utilisateur.">
+                            <i class="fas fa-question-circle"></i>
+                        </span>
+                    </h2>
+                    <div class="header-actions">
+                        <input type="text" placeholder="Rechercher un utilisateur..." class="search-input" id="userSearch">
+                        <button class="btn btn-primary" id="searchUsersBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button class="btn btn-success" id="exportUsersBtn">
+                            <i class="fas fa-download"></i>
+                            Exporter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="users-table-container">
+                    <table class="data-table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Solde</th>
+                                <th>Statut</th>
+                                <th>Inscription</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="usersPagination">
+                    <!-- Pagination will be generated dynamically -->
+                </div>
+            </section>
+
+            <!-- Transactions Section -->
+            <section id="transactions-section" class="content-section">
+                <div class="section-header">
+                    <h2>Transactions</h2>
+                    <div class="header-actions">
+                        <select class="form-control" id="transactionTypeFilter">
+                            <option value="">Tous les types</option>
+                            <option value="recharge">Recharge</option>
+                            <option value="bundle">Forfait</option>
+                            <option value="deposit">Dépôt</option>
+                            <option value="withdraw">Retrait</option>
+                        </select>
+                        <select class="form-control" id="transactionStatusFilter">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending">En attente</option>
+                            <option value="completed">Terminée</option>
+                            <option value="failed">Échouée</option>
+                        </select>
+                        <input type="date" class="form-control" id="transactionDateFilter">
+                        <button class="btn btn-primary" id="filterTransactionsBtn">
+                            <i class="fas fa-filter"></i>
+                            Filtrer
+                        </button>
+                    </div>
+                </div>
+
+                <div class="transactions-table-container">
+                    <table class="data-table" id="transactionsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Utilisateur</th>
+                                <th>Type</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <!-- Transactions will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Recharges Section -->
+            <section id="recharges-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Recharges</h2>
+                    <div class="header-actions">
+                        <select class="form-control" id="rechargeOperatorFilter">
+                            <option value="">Tous les opérateurs</option>
+                            <option value="MTN">MTN</option>
+                            <option value="Orange">Orange</option>
+                            <option value="Camtel">Camtel</option>
+                        </select>
+                        <select class="form-control" id="rechargeStatusFilter">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending">En attente</option>
+                            <option value="completed">Terminée</option>
+                            <option value="failed">Échouée</option>
+                        </select>
+                        <input type="date" class="form-control" id="rechargeDateFilter">
+                        <button class="btn btn-primary" id="filterRechargesBtn">
+                            <i class="fas fa-filter"></i>
+                            Filtrer
+                        </button>
+                        <button class="btn btn-success" id="exportRechargesBtn">
+                            <i class="fas fa-download"></i>
+                            Exporter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid" style="margin-bottom: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRechargesCount">0</h3>
+                            <p>Recharges Totales</p>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRechargesAmount">0 FCFA</h3>
+                            <p>Volume Total</p>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingRechargesCount">0</h3>
+                            <p>En Attente</p>
+                            <div class="trend negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>-2%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="failedRechargesCount">0</h3>
+                            <p>Échouées</p>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>-8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recharges-table-container">
+                    <table class="data-table" id="rechargesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Utilisateur</th>
+                                <th>Opérateur</th>
+                                <th>Numéro</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Référence</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rechargesTableBody">
+                            <!-- Recharges will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="rechargesPagination">
+                    <!-- Pagination will be generated dynamically -->
+                </div>
+            </section>
+
+            <!-- Bundles Section -->
+            <section id="bundles-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Forfaits</h2>
+                    <button class="btn btn-primary" id="addBundleBtn">
+                        <i class="fas fa-plus"></i>
+                        Nouveau Forfait
+                    </button>
+                </div>
+
+                <div class="coming-soon">
+                    <i class="fas fa-wifi"></i>
+                    <h3>Forfaits Internet & Voix</h3>
+                    <p>Gestion des forfaits pour tous les opérateurs.</p>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="orders-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Commandes</h2>
+                    <div class="header-actions">
+                        <select class="form-control" id="orderStatusFilter">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending">En attente</option>
+                            <option value="processing">En cours</option>
+                            <option value="completed">Terminée</option>
+                            <option value="cancelled">Annulée</option>
+                        </select>
+                        <input type="date" class="form-control" id="orderDateFilter">
+                        <button class="btn btn-primary" id="filterOrdersBtn">
+                            <i class="fas fa-filter"></i>
+                            Filtrer
+                        </button>
+                    </div>
+                </div>
+
+                <div class="orders-table-container">
+                    <table class="data-table" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>ID Commande</th>
+                                <th>Client</th>
+                                <th>Produits</th>
+                                <th>Total</th>
+                                <th>Statut</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="products-section" class="content-section">
+                <div class="section-header">
+                    <h2>Produits Électroniques 
+                        <span class="help-tooltip" data-tooltip="Cataloguez vos produits : modems, laptops, smartphones, etc. Gérez le stock, les prix et la disponibilité.">
+                            <i class="fas fa-question-circle"></i>
+                        </span>
+                    </h2>
+                    <div class="header-actions">
+                        <select class="form-control" id="productCategoryFilter">
+                            <option value="">Toutes les catégories</option>
+                            <option value="modems">Modems</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="routeurs">Routeurs</option>
+                            <option value="smartphones">Smartphones</option>
+                            <option value="accessoires">Accessoires</option>
+                        </select>
+                        <button class="btn btn-primary" id="addProductBtn">
+                            <i class="fas fa-plus"></i>
+                            Nouveau Produit
+                        </button>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+            </section>
+
+            <section id="notifications-section" class="content-section">
+                <div class="section-header">
+                    <h2>Notifications Push 
+                        <span class="help-tooltip" data-tooltip="Envoyez des notifications à vos utilisateurs. Utilisez les templates pour gagner du temps !">
+                            <i class="fas fa-question-circle"></i>
+                        </span>
+                    </h2>
+                    <button class="btn btn-primary" id="sendNotificationBtn">
+                        <i class="fas fa-plus"></i>
+                        Nouvelle Notification
+                    </button>
+                </div>
+
+                <div class="notification-form">
+                    <div class="form-group">
+                        <label for="notificationTemplate">Template rapide</label>
+                        <select class="form-control" id="notificationTemplate">
+                            <option value="">Choisir un template...</option>
+                            <option value="maintenance">Maintenance programmée</option>
+                            <option value="promotion">Promotion spéciale</option>
+                            <option value="nouveau_produit">Nouveau produit</option>
+                            <option value="mise_a_jour">Mise à jour disponible</option>
+                            <option value="felicitations">Félicitations</option>
+                            <option value="rappel_paiement">Rappel de paiement</option>
+                            <option value="bienvenue">Message de bienvenue</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notificationTitle">Titre</label>
+                        <input type="text" class="form-control" id="notificationTitle" placeholder="Titre de la notification">
+                    </div>
+                    <div class="form-group">
+                        <label for="notificationMessage">Message</label>
+                        <textarea class="form-control" id="notificationMessage" rows="3" placeholder="Contenu de la notification"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="notificationType">Type</label>
+                        <select class="form-control" id="notificationType">
+                            <option value="broadcast">Diffusion générale</option>
+                            <option value="targeted">Utilisateurs ciblés</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" id="sendNotificationSubmit">
+                        <i class="fas fa-paper-plane"></i>
+                        Envoyer Notification
+                    </button>
+                </div>
+            </section>
+
+            <section id="reports-section" class="content-section">
+                <div class="section-header">
+                    <h2>Rapports et Analyses</h2>
+                    <div class="header-actions">
+                        <select class="form-control" id="reportPeriod">
+                            <option value="7">7 derniers jours</option>
+                            <option value="30" selected>30 derniers jours</option>
+                            <option value="90">3 derniers mois</option>
+                            <option value="365">12 derniers mois</option>
+                        </select>
+                        <button class="btn btn-primary" id="refreshReportsBtn">
+                            <i class="fas fa-sync-alt"></i>
+                            Actualiser
+                        </button>
+                        <button class="btn btn-success" id="exportReportBtn">
+                            <i class="fas fa-download"></i>
+                            Exporter PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="reports-kpis">
+                    <div class="stats-grid" style="margin-bottom: 2rem;">
+                        <div class="stat-card primary">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="reportTotalRevenue">0 FCFA</h3>
+                                <p>Chiffre d'Affaires</p>
+                                <div class="trend positive" id="reportRevenueTrend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card success">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="reportActiveUsers">0</h3>
+                                <p>Utilisateurs Actifs</p>
+                                <div class="trend positive" id="reportUsersTrend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card warning">
+                            <div class="stat-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="reportTotalTransactions">0</h3>
+                                <p>Transactions</p>
+                                <div class="trend positive" id="reportTransactionsTrend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card danger">
+                            <div class="stat-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="reportSuccessRate">0%</h3>
+                                <p>Taux de Réussite</p>
+                                <div class="trend positive" id="reportSuccessTrend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row" style="margin-bottom: 2rem;">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Evolution du Chiffre d'Affaires</h3>
+                        </div>
+                        <canvas id="revenueEvolutionChart" height="300"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Répartition par Opérateur</h3>
+                        </div>
+                        <canvas id="operatorDistributionChart" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="reports-tables">
+                    <div class="charts-row">
+                        <div class="chart-container">
+                            <h3>Top Utilisateurs</h3>
+                            <div class="top-users-list" id="topUsersList">
+                                <!-- Top users will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Produits Populaires</h3>
+                            <div class="top-products-list" id="topProductsList">
+                                <!-- Top products will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings-section" class="content-section">
+                <div class="section-header">
+                    <h2>Paramètres Système</h2>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Configuration</h3>
+                    <p>Paramètres de l'application et Firebase.</p>
+                </div>
+            </section>
+
+            <section id="settings-section" class="content-section">
+                <div class="section-header">
+                    <h2>Paramètres Système</h2>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Configuration</h3>
+                    <p>Paramètres de l'application et Firebase.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="userDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Détails de l'utilisateur</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="userDetailsContent">
+                <!-- User details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal" id="editUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier l'utilisateur</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <div class="form-group">
+                        <label for="editUserName">Nom complet</label>
+                        <input type="text" class="form-control" id="editUserName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserEmail">Email</label>
+                        <input type="email" class="form-control" id="editUserEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserPhone">Téléphone</label>
+                        <input type="tel" class="form-control" id="editUserPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserBalance">Solde (FCFA)</label>
+                        <input type="number" class="form-control" id="editUserBalance" min="0" step="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserStatus">Statut</label>
+                        <select class="form-control" id="editUserStatus">
+                            <option value="active">Actif</option>
+                            <option value="inactive">Inactif</option>
+                            <option value="blocked">Bloqué</option>
+                            <option value="suspended">Suspendu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Enregistrer les modifications
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Details Modal -->
+    <div class="modal" id="transactionDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Détails de la transaction</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="transactionDetailsContent">
+                <!-- Transaction details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Recharge Details Modal -->
+    <div class="modal" id="rechargeDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Détails de la recharge</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="rechargeDetailsContent">
+                <!-- Recharge details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Nouveau Produit</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="productName">Nom du produit</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">Prix (FCFA)</label>
+                        <input type="number" class="form-control" id="productPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Catégorie</label>
+                        <select class="form-control" id="productCategory" required>
+                            <option value="">Choisir une catégorie</option>
+                            <option value="modems">Modems</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="routeurs">Routeurs</option>
+                            <option value="smartphones">Smartphones</option>
+                            <option value="accessoires">Accessoires</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productBrand">Marque</label>
+                        <input type="text" class="form-control" id="productBrand" placeholder="Ex: Samsung, HP, TP-Link">
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">Stock initial</label>
+                        <input type="number" class="form-control" id="productStock" min="0" placeholder="Quantité en stock">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="productIsActive" checked>
+                            Produit actif
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Enregistrer
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal" id="orderDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Détails de la commande</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="orderDetailsContent">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Chargement...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-functions-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

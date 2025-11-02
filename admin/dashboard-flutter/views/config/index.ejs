@@ -1,0 +1,448 @@
+<div class="fade-in">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2"><i class="fas fa-cogs me-2"></i>Configuration système</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-success" onclick="saveAllSettings()">
+                <i class="fas fa-save me-2"></i>Sauvegarder tout
+            </button>
+        </div>
+    </div>
+
+    <!-- Configuration API Maviance -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-plug me-2"></i>Configuration API Maviance
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="apiConfigForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="s3p_key" class="form-label">Clé S3P (Public)</label>
+                            <input type="text" class="form-control" id="s3p_key" value="<%= config.api.s3p_key %>" readonly>
+                            <div class="form-text">Clé publique fournie par Maviance</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="base_url" class="form-label">URL de base API</label>
+                            <input type="url" class="form-control" id="base_url" value="<%= config.api.base_url %>">
+                            <div class="form-text">URL de base pour les appels API Maviance</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="api_timeout" class="form-label">Timeout API (ms)</label>
+                            <input type="number" class="form-control" id="api_timeout" value="<%= config.api.timeout %>" min="5000" max="60000">
+                            <div class="form-text">Délai d'expiration des requêtes API en millisecondes</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-primary mt-4" onclick="testApiConnection()">
+                                <i class="fas fa-wifi me-2"></i>Tester la connexion
+                            </button>
+                            <span id="apiTestResult" class="ms-2"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Configuration Application -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-mobile-alt me-2"></i>Configuration Application
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="appConfigForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="app_name" class="form-label">Nom de l'application</label>
+                            <input type="text" class="form-control" id="app_name" value="<%= config.app.name %>">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="app_version" class="form-label">Version</label>
+                            <input type="text" class="form-control" id="app_version" value="<%= config.app.version %>">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="maintenance_mode" <%= config.app.maintenance_mode ? 'checked' : '' %>>
+                                <label class="form-check-label" for="maintenance_mode">
+                                    Mode maintenance
+                                </label>
+                            </div>
+                            <div class="form-text">Active le mode maintenance pour l'application</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Configuration Frais -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-percentage me-2"></i>Configuration des Frais
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="feesConfigForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="transaction_fee" class="form-label">Frais de transaction (%)</label>
+                            <input type="number" class="form-control" id="transaction_fee" value="<%= (config.fees.transaction_fee * 100).toFixed(2) %>" step="0.01" min="0" max="10">
+                            <div class="form-text">Pourcentage prélevé sur chaque transaction</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="min_fee" class="form-label">Frais minimum (FCFA)</label>
+                            <input type="number" class="form-control" id="min_fee" value="<%= config.fees.min_fee %>" min="0">
+                            <div class="form-text">Montant minimum des frais</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="max_fee" class="form-label">Frais maximum (FCFA)</label>
+                            <input type="number" class="form-control" id="max_fee" value="<%= config.fees.max_fee %>" min="0">
+                            <div class="form-text">Montant maximum des frais</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-calculator me-2"></i>
+                    <strong>Exemple:</strong> Pour une transaction de 10,000 FCFA avec 2% de frais (min: 50, max: 1000),
+                    les frais seront de 200 FCFA.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Configuration Notifications -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-bell me-2"></i>Configuration Notifications
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="notificationsConfigForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_enabled" <%= config.notifications.email_enabled ? 'checked' : '' %>>
+                            <label class="form-check-label" for="email_enabled">
+                                Notifications email activées
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="sms_enabled" <%= config.notifications.sms_enabled ? 'checked' : '' %>>
+                            <label class="form-check-label" for="sms_enabled">
+                                Notifications SMS activées
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-tools me-2"></i>Actions rapides
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-info w-100 mb-2" onclick="clearCache()">
+                        <i class="fas fa-broom me-2"></i>Vider le cache
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-warning w-100 mb-2" onclick="restartService()">
+                        <i class="fas fa-redo me-2"></i>Redémarrer service
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-secondary w-100 mb-2" onclick="exportConfig()">
+                        <i class="fas fa-download me-2"></i>Exporter config
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary w-100 mb-2" onclick="viewLogs()">
+                        <i class="fas fa-file-alt me-2"></i>Voir les logs
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function saveAllSettings() {
+    const loadingBtn = event.target;
+    const originalText = loadingBtn.innerHTML;
+    loadingBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Sauvegarde...';
+    loadingBtn.disabled = true;
+    
+    try {
+        // Sauvegarder toutes les configurations
+        await Promise.all([
+            saveApiConfig(),
+            saveAppConfig(),
+            saveFeesConfig(),
+            saveNotificationsConfig()
+        ]);
+        
+        showToast('Configuration sauvegardée avec succès!', 'success');
+    } catch (error) {
+        showToast('Erreur lors de la sauvegarde: ' + error.message, 'danger');
+    } finally {
+        loadingBtn.innerHTML = originalText;
+        loadingBtn.disabled = false;
+    }
+}
+
+async function saveApiConfig() {
+    const response = await fetch('/config/api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            base_url: document.getElementById('base_url').value,
+            timeout: parseInt(document.getElementById('api_timeout').value)
+        })
+    });
+    
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+    }
+    
+    return response.json();
+}
+
+async function saveAppConfig() {
+    const response = await fetch('/config/app', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: document.getElementById('app_name').value,
+            version: document.getElementById('app_version').value,
+            maintenance_mode: document.getElementById('maintenance_mode').checked
+        })
+    });
+    
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+    }
+    
+    return response.json();
+}
+
+async function saveFeesConfig() {
+    const response = await fetch('/config/fees', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            transaction_fee: parseFloat(document.getElementById('transaction_fee').value) / 100,
+            min_fee: parseInt(document.getElementById('min_fee').value),
+            max_fee: parseInt(document.getElementById('max_fee').value)
+        })
+    });
+    
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+    }
+    
+    return response.json();
+}
+
+async function saveNotificationsConfig() {
+    const response = await fetch('/config/notifications', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email_enabled: document.getElementById('email_enabled').checked,
+            sms_enabled: document.getElementById('sms_enabled').checked
+        })
+    });
+    
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+    }
+    
+    return response.json();
+}
+
+async function testApiConnection() {
+    const resultSpan = document.getElementById('apiTestResult');
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Test...';
+    resultSpan.innerHTML = '';
+    
+    try {
+        const response = await fetch('/config/test-api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            resultSpan.innerHTML = `<span class="badge bg-success"><i class="fas fa-check me-1"></i>Connexion OK (${result.response_time}ms)</span>`;
+        } else {
+            resultSpan.innerHTML = `<span class="badge bg-danger"><i class="fas fa-times me-1"></i>Erreur</span>`;
+        }
+    } catch (error) {
+        resultSpan.innerHTML = `<span class="badge bg-danger"><i class="fas fa-times me-1"></i>Erreur de connexion</span>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
+async function clearCache() {
+    if(confirm('Voulez-vous vraiment vider le cache?')) {
+        try {
+            const response = await fetch('/config/clear-cache', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                showToast(result.message, 'success');
+            } else {
+                showToast('Erreur lors du vidage du cache', 'danger');
+            }
+        } catch (error) {
+            showToast('Erreur de connexion', 'danger');
+        }
+    }
+}
+
+async function restartService() {
+    if(confirm('Voulez-vous vraiment redémarrer le service? Cela peut prendre quelques minutes.')) {
+        try {
+            const response = await fetch('/config/restart-service', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                showToast(result.message, 'success');
+            } else {
+                showToast('Erreur lors du redémarrage du service', 'danger');
+            }
+        } catch (error) {
+            showToast('Erreur de connexion', 'danger');
+        }
+    }
+}
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0`;
+    toast.style.position = 'fixed';
+    toast.style.top = '20px';
+    toast.style.right = '20px';
+    toast.style.zIndex = '9999';
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    
+    setTimeout(() => {
+        if (document.body.contains(toast)) {
+            document.body.removeChild(toast);
+        }
+    }, 4000);
+}
+
+function exportConfig() {
+    // Créer un fichier de configuration JSON et le télécharger
+    const config = {
+        api: {
+            s3p_key: document.getElementById('s3p_key').value,
+            base_url: document.getElementById('base_url').value,
+            timeout: parseInt(document.getElementById('api_timeout').value)
+        },
+        app: {
+            name: document.getElementById('app_name').value,
+            version: document.getElementById('app_version').value,
+            maintenance_mode: document.getElementById('maintenance_mode').checked
+        },
+        fees: {
+            transaction_fee: parseFloat(document.getElementById('transaction_fee').value) / 100,
+            min_fee: parseInt(document.getElementById('min_fee').value),
+            max_fee: parseInt(document.getElementById('max_fee').value)
+        },
+        notifications: {
+            email_enabled: document.getElementById('email_enabled').checked,
+            sms_enabled: document.getElementById('sms_enabled').checked
+        }
+    };
+    
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(config, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "merecharge_config.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+function viewLogs() {
+    // Ouvrir une modal avec les logs (simulation)
+    alert('Fonctionnalité de visualisation des logs à implémenter');
+}
+</script>

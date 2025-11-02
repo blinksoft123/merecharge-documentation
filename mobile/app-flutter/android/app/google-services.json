@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "891263588555",
+    "project_id": "merecharge-50ab0",
+    "storage_bucket": "merecharge-50ab0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891263588555:android:ca0b71553d89db9ee7634e",
+        "android_client_info": {
+          "package_name": "com.meerecharge.blinksoft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891263588555-iolddncdhghu1id4gk0cfalr3dphli9c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meerecharge.blinksoft",
+            "certificate_hash": "37a8affc942f0fae5af700dd41c2e83040f113d6"
+          }
+        },
+        {
+          "client_id": "891263588555-18nktkfbkp311ffrojfupmg2jrspqsp1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC2IbsKhOOsADBT5MruxDPowFtTL7B-3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891263588555-18nktkfbkp311ffrojfupmg2jrspqsp1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeRecharge - Dashboard Admin</title>
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-bolt"></i> MeRecharge</h3>
+            <span class="admin-badge">Admin</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#transactions" class="nav-link" data-section="transactions">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transactions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#services" class="nav-link" data-section="services">
+                        <i class="fas fa-cogs"></i>
+                        <span>Services Maviance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#callbox" class="nav-link" data-section="callbox">
+                        <i class="fas fa-phone-square"></i>
+                        <span>CallBox Sync</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#reports" class="nav-link" data-section="reports">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Rapports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#settings" class="nav-link" data-section="settings">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button class="btn btn-danger" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Déconnexion
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-right">
+                <div class="server-status">
+                    <i class="fas fa-circle status-dot" id="serverStatus"></i>
+                    <span id="serverStatusText">Vérification...</span>
+                </div>
+                <div class="admin-info">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Administrateur</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                    <button class="btn btn-primary" id="refreshDashboard">
+                        <i class="fas fa-sync-alt"></i> Actualiser
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalTransactions">0</h3>
+                            <p>Transactions Aujourd'hui</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="successfulTransactions">0</h3>
+                            <p>Transactions Réussies</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="failedTransactions">0</h3>
+                            <p>Transactions Échouées</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon info">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRevenue">0 XAF</h3>
+                            <p>Revenus du Jour</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h4>Transactions par Heure</h4>
+                        <canvas id="transactionsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h4>Répartition par Type</h4>
+                        <canvas id="typeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h4><i class="fas fa-clock"></i> Activité Récente</h4>
+                    <div class="activity-list" id="recentActivity">
+                        <!-- Activités dynamiques -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transactions Section -->
+            <section id="transactions-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-exchange-alt"></i> Gestion des Transactions</h2>
+                    <div class="header-actions">
+                        <input type="date" id="transactionDate" class="form-control">
+                        <select id="transactionType" class="form-control">
+                            <option value="">Tous les types</option>
+                            <option value="recharge">Recharge</option>
+                            <option value="voucher">Forfait</option>
+                            <option value="deposit">Dépôt</option>
+                            <option value="withdraw">Retrait</option>
+                        </select>
+                        <button class="btn btn-primary" id="searchTransactions">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="transactionsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Numéro</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <!-- Données dynamiques -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="transactionsPagination">
+                    <!-- Pagination dynamique -->
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section id="services-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cogs"></i> Services Maviance</h2>
+                    <button class="btn btn-primary" id="refreshServices">
+                        <i class="fas fa-sync-alt"></i> Actualiser Services
+                    </button>
+                </div>
+
+                <div class="services-grid" id="servicesGrid">
+                    <!-- Services dynamiques -->
+                </div>
+            </section>
+
+            <!-- CallBox Section -->
+            <section id="callbox-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-phone-square"></i> CallBox Synchronisation</h2>
+                    <div class="sync-controls">
+                        <button class="btn btn-success" id="startSync">
+                            <i class="fas fa-play"></i> Démarrer
+                        </button>
+                        <button class="btn btn-warning" id="stopSync">
+                            <i class="fas fa-stop"></i> Arrêter
+                        </button>
+                        <button class="btn btn-info" id="forceSync">
+                            <i class="fas fa-sync"></i> Forcer Sync
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sync-status-grid">
+                    <div class="status-card">
+                        <h4>Statut de Synchronisation</h4>
+                        <div class="status-info" id="syncStatusInfo">
+                            <p>Chargement...</p>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <h4>Dernière Synchronisation</h4>
+                        <div class="status-info" id="lastSyncInfo">
+                            <p>Chargement...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sync-logs">
+                    <h4><i class="fas fa-list"></i> Logs de Synchronisation</h4>
+                    <div class="logs-container" id="syncLogs">
+                        <!-- Logs dynamiques -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> Rapports et Analyses</h2>
+                    <div class="date-range">
+                        <input type="date" id="reportStartDate" class="form-control">
+                        <input type="date" id="reportEndDate" class="form-control">
+                        <button class="btn btn-primary" id="generateReport">
+                            <i class="fas fa-chart-bar"></i> Générer
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="report-card">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-sliders-h"></i> Paramètres Système</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-card">
+                        <h4>Configuration API</h4>
+                        <form id="apiSettingsForm">
+                            <div class="form-group">
+                                <label for="apiKey">Clé API:</label>
+                                <input type="password" id="apiKey" class="form-control" placeholder="••••••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Sauvegarder
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="setting-card">
+                        <h4>Notifications</h4>
+                        <form id="notificationSettings">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="emailNotifications"> 
+                                    Notifications par email
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="smsNotifications"> 
+                                    Notifications SMS
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Sauvegarder
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal" id="loadingModal">
+        <div class="modal-content">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Chargement en cours...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

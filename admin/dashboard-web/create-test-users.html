@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer des Utilisateurs Test - MeRecharge</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        .success { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+        .error { background: #fee2e2; color: #dc2626; border-left: 4px solid #ef4444; }
+        .warning { background: #fef3c7; color: #d97706; border-left: 4px solid #f59e0b; }
+        .info { background: #dbeafe; color: #2563eb; border-left: 4px solid #3b82f6; }
+        button {
+            background: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+        button:hover { background: #4338ca; }
+        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        .user-list {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+        }
+        pre { background: #334155; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    </style>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 MeRecharge - Créer des Utilisateurs Test</h1>
+        
+        <div id="status" class="status info">
+            📋 Prêt à créer des utilisateurs test dans Firestore
+        </div>
+        
+        <button onclick="testConnection()">🔍 Tester la Connexion Firebase</button>
+        <button onclick="createTestUsers()">👥 Créer 5 Utilisateurs Test</button>
+        <button onclick="listUsers()">📋 Lister les Utilisateurs</button>
+        <button onclick="clearUsers()">🗑️ Supprimer Tous les Utilisateurs</button>
+        
+        <div id="usersList" class="user-list" style="display: none;">
+            <h3>📋 Utilisateurs dans Firestore:</h3>
+            <div id="usersContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Firebase MeRecharge
+        const firebaseConfig = {
+            apiKey: "AIzaSyApQvH-IYdDvIBgUh7i1G3dNko7N61a_r0",
+            authDomain: "merecharge-50ab0.firebaseapp.com",
+            projectId: "merecharge-50ab0",
+            storageBucket: "merecharge-50ab0.firebasestorage.app",
+            messagingSenderId: "891263588555",
+            appId: "1:891263588555:web:709e0c474ee3f790e7634e"
+        };
+        
+        // Initialiser Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        async function testConnection() {
+            updateStatus('🔍 Test de connexion Firebase...', 'info');
+            
+            try {
+                // Test simple de lecture Firestore
+                await db.collection('test').limit(1).get();
+                updateStatus('✅ Connexion Firebase réussie!', 'success');
+                
+                // Compter les utilisateurs existants
+                const snapshot = await db.collection('users').get();
+                updateStatus(`✅ Connexion OK - ${snapshot.size} utilisateurs trouvés`, 'success');
+                
+            } catch (error) {
+                updateStatus(`❌ Erreur de connexion: ${error.message}`, 'error');
+                console.error('Firebase Error:', error);
+            }
+        }
+        
+        async function createTestUsers() {
+            updateStatus('👥 Création des utilisateurs test...', 'info');
+            
+            const testUsers = [
+                {
+                    name: 'Jean Dupont',
+                    email: 'jean.dupont@example.com',
+                    phone: '+237698123456',
+                    status: 'active',
+                    balance: 25000,
+                    photoURL: null,
+                    createdAt: new Date(),
+                    lastActivity: new Date()
+                },
+                {
+                    name: 'Marie Ngono',
+                    email: 'marie.ngono@example.com', 
+                    phone: '+237677987654',
+                    status: 'active',
+                    balance: 15000,
+                    photoURL: null,
+                    createdAt: new Date(),
+                    lastActivity: new Date()
+                },
+                {
+                    name: 'Paul Kamga',
+                    email: 'paul.kamga@example.com',
+                    phone: '+237655445566', 
+                    status: 'inactive',
+                    balance: 5000,
+                    photoURL: null,
+                    createdAt: new Date(),
+                    lastActivity: new Date()
+                },
+                {
+                    name: 'Sophie Talla',
+                    email: 'sophie.talla@example.com',
+                    phone: '+237699887766',
+                    status: 'blocked',
+                    balance: 0,
+                    photoURL: null,
+                    createdAt: new Date(), 
+                    lastActivity: new Date()
+                },
+                {
+                    name: 'Eric Biya',
+                    email: 'eric.biya@example.com',
+                    phone: '+237644556677',
+                    status: 'active',
+                    balance: 35000,
+                    photoURL: null,
+                    createdAt: new Date(),
+                    lastActivity: new Date()
+                }
+            ];
+            
+            try {
+                const batch = db.batch();
+                
+                testUsers.forEach((userData, index) => {
+                    const docRef = db.collection('users').doc(`user_${index + 1}`);
+                    batch.set(docRef, userData);
+                });
+                
+                await batch.commit();
+                updateStatus(`✅ ${testUsers.length} utilisateurs créés avec succès!`, 'success');
+                
+                // Lister automatiquement après création
+                setTimeout(listUsers, 1000);
+                
+            } catch (error) {
+                updateStatus(`❌ Erreur lors de la création: ${error.message}`, 'error');
+                console.error('Creation Error:', error);
+            }
+        }
+        
+        async function listUsers() {
+            updateStatus('📋 Récupération de la liste des utilisateurs...', 'info');
+            
+            try {
+                const snapshot = await db.collection('users').get();
+                const users = [];
+                
+                snapshot.forEach(doc => {
+                    users.push({
+                        id: doc.id,
+                        ...doc.data(),
+                        createdAt: doc.data().createdAt?.toDate?.()?.toLocaleString() || 'N/A',
+                        lastActivity: doc.data().lastActivity?.toDate?.()?.toLocaleString() || 'N/A'
+                    });
+                });
+                
+                const usersList = document.getElementById('usersList');
+                const usersContent = document.getElementById('usersContent');
+                
+                if (users.length === 0) {
+                    usersContent.innerHTML = '<p>Aucun utilisateur trouvé.</p>';
+                } else {
+                    usersContent.innerHTML = `
+                        <p><strong>${users.length} utilisateurs trouvés:</strong></p>
+                        <pre>${JSON.stringify(users, null, 2)}</pre>
+                    `;
+                }
+                
+                usersList.style.display = 'block';
+                updateStatus(`📋 ${users.length} utilisateurs listés`, 'success');
+                
+            } catch (error) {
+                updateStatus(`❌ Erreur lors de la lecture: ${error.message}`, 'error');
+                console.error('Read Error:', error);
+            }
+        }
+        
+        async function clearUsers() {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer tous les utilisateurs?')) {
+                return;
+            }
+            
+            updateStatus('🗑️ Suppression des utilisateurs...', 'warning');
+            
+            try {
+                const snapshot = await db.collection('users').get();
+                const batch = db.batch();
+                
+                snapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                await batch.commit();
+                updateStatus(`✅ ${snapshot.size} utilisateurs supprimés`, 'success');
+                
+                // Cacher la liste
+                document.getElementById('usersList').style.display = 'none';
+                
+            } catch (error) {
+                updateStatus(`❌ Erreur lors de la suppression: ${error.message}`, 'error');
+                console.error('Delete Error:', error);
+            }
+        }
+        
+        // Test automatique au chargement
+        setTimeout(testConnection, 1000);
+    </script>
+</body>
+</html>

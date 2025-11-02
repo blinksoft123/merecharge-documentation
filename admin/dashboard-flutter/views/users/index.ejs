@@ -1,0 +1,205 @@
+<div class="fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2"><i class="fas fa-users me-2"></i>Utilisateurs de l'application</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-primary">
+                <i class="fas fa-user-plus me-1"></i>Nouvel utilisateur
+            </button>
+        </div>
+    </div>
+
+    <!-- Recherche et filtres -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="/users" class="row g-3">
+                <div class="col-md-6">
+                    <label for="search" class="form-label">Recherche</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           value="<%= search %>" placeholder="Nom, email ou téléphone...">
+                </div>
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Statut</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">Tous</option>
+                        <option value="active">Actif</option>
+                        <option value="suspended">Suspendu</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-search me-1"></i>Rechercher
+                    </button>
+                    <a href="/users" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i>Effacer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des utilisateurs -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Liste des utilisateurs
+                <span class="badge bg-primary ms-2"><%= totalUsers %></span>
+            </h5>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-download me-1"></i>Exporter
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Contact</th>
+                            <th>Inscription</th>
+                            <th>Dernière activité</th>
+                            <th>Transactions</th>
+                            <th>Total dépensé</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(user => { %>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle me-3">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong><%= user.name %></strong><br>
+                                            <small class="text-muted">ID: <%= user.id %></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <div><%= user.email %></div>
+                                        <small class="text-muted"><%= user.phone %></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <%= user.registrationDate.toLocaleDateString() %>
+                                </td>
+                                <td>
+                                    <div>
+                                        <%= user.lastActivity.toLocaleDateString() %><br>
+                                        <small class="text-muted"><%= user.lastActivity.toLocaleTimeString() %></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info"><%= user.totalTransactions %></span>
+                                </td>
+                                <td>
+                                    <strong><%= user.totalSpent.toLocaleString() %> XAF</strong>
+                                </td>
+                                <td>
+                                    <span class="status-badge <%= user.status %>">
+                                        <% if (user.status === 'active') { %>
+                                            <i class="fas fa-check me-1"></i>Actif
+                                        <% } else { %>
+                                            <i class="fas fa-ban me-1"></i>Suspendu
+                                        <% } %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/users/<%= user.id %>" class="btn btn-outline-primary btn-sm" title="Voir détails">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button class="btn btn-outline-warning btn-sm" 
+                                                onclick="toggleUserStatus(<%= user.id %>, '<%= user.status %>')" 
+                                                title="<%= user.status === 'active' ? 'Suspendre' : 'Activer' %>">
+                                            <i class="fas fa-<%= user.status === 'active' ? 'ban' : 'check' %>"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        
+                        <% if (users.length === 0) { %>
+                            <tr>
+                                <td colspan="8" class="text-center py-4">
+                                    <div class="text-muted">
+                                        <i class="fas fa-users fa-3x mb-3"></i>
+                                        <h5>Aucun utilisateur trouvé</h5>
+                                        <p>Aucun utilisateur ne correspond aux critères de recherche.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+            <div class="card-footer">
+                <nav>
+                    <ul class="pagination justify-content-center mb-0">
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                <a class="page-link" href="/users?page=<%= i %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+function toggleUserStatus(userId, currentStatus) {
+    if (!confirm(`Êtes-vous sûr de vouloir ${currentStatus === 'active' ? 'suspendre' : 'activer'} cet utilisateur ?`)) {
+        return;
+    }
+    
+    fetch(`/users/${userId}/toggle-status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erreur: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Une erreur est survenue');
+    });
+}
+</script>
+
+<style>
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+</style>

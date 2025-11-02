@@ -1,0 +1,247 @@
+<div class="fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2"><i class="fas fa-tachometer-alt me-2"></i>Tableau de bord</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-outline-secondary">
+                    <i class="fas fa-download me-1"></i>Exporter
+                </button>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="refreshStats()">
+                <i class="fas fa-sync-alt me-1"></i>Actualiser
+            </button>
+        </div>
+    </div>
+
+    <!-- Cartes de statistiques -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon primary me-3">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value"><%= stats.totalUsers.toLocaleString() %></div>
+                            <div class="stat-label">Utilisateurs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon success me-3">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value"><%= stats.totalTransactions.toLocaleString() %></div>
+                            <div class="stat-label">Transactions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon warning me-3">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value"><%= (stats.todayRevenue / 1000).toFixed(0) %>k XAF</div>
+                            <div class="stat-label">Revenus du jour</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon danger me-3">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value"><%= stats.pendingTransactions %></div>
+                            <div class="stat-label">En attente</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphiques -->
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-chart-line me-2"></i>Transactions mensuelles</h5>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="col-xl-4 col-lg-5">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-chart-pie me-2"></i>Répartition par type</h5>
+                <canvas id="typeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions récentes -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Transactions récentes</h5>
+            <a href="/transactions" class="btn btn-outline-primary btn-sm">
+                Voir toutes les transactions
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Utilisateur</th>
+                            <th>Type</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% stats.recentTransactions.forEach(transaction => { %>
+                            <tr>
+                                <td><code><%= transaction.id %></code></td>
+                                <td>
+                                    <div>
+                                        <strong><%= transaction.user %></strong><br>
+                                        <small class="text-muted"><%= transaction.phone %></small>
+                                    </div>
+                                </td>
+                                <td><%= transaction.type %></td>
+                                <td><%= transaction.amount.toLocaleString() %> XAF</td>
+                                <td>
+                                    <span class="status-badge <%= transaction.status %>">
+                                        <% if (transaction.status === 'success') { %>
+                                            <i class="fas fa-check me-1"></i>Réussie
+                                        <% } else if (transaction.status === 'pending') { %>
+                                            <i class="fas fa-clock me-1"></i>En cours
+                                        <% } else { %>
+                                            <i class="fas fa-times me-1"></i>Échouée
+                                        <% } %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div>
+                                        <%= transaction.date.toLocaleDateString() %><br>
+                                        <small class="text-muted"><%= transaction.date.toLocaleTimeString() %></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-outline-primary btn-sm" title="Voir détails">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm" title="Retraiter">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Données pour les graphiques
+const monthlyData = <%- JSON.stringify(stats.monthlyTransactions) %>;
+const typeData = <%- JSON.stringify(stats.transactionsByType) %>;
+
+// Graphique des transactions mensuelles
+const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+new Chart(monthlyCtx, {
+    type: 'line',
+    data: {
+        labels: monthlyData.map(item => item.month),
+        datasets: [{
+            label: 'Transactions',
+            data: monthlyData.map(item => item.count),
+            borderColor: '#4BA3F2',
+            backgroundColor: 'rgba(75, 163, 242, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Graphique par type de transaction
+const typeCtx = document.getElementById('typeChart').getContext('2d');
+new Chart(typeCtx, {
+    type: 'doughnut',
+    data: {
+        labels: typeData.map(item => item.type),
+        datasets: [{
+            data: typeData.map(item => item.count),
+            backgroundColor: typeData.map(item => item.color),
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Fonction pour actualiser les statistiques
+function refreshStats() {
+    const btn = document.querySelector('button[onclick="refreshStats()"]');
+    const icon = btn.querySelector('i');
+    
+    // Animation de rotation
+    icon.classList.add('fa-spin');
+    btn.disabled = true;
+    
+    // Simulation de rechargement
+    setTimeout(() => {
+        icon.classList.remove('fa-spin');
+        btn.disabled = false;
+        location.reload();
+    }, 1500);
+}
+</script>

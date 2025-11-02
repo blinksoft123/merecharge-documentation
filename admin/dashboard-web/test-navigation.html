@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navigation - MeRecharge Admin</title>
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #1e293b;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            z-index: 9999;
+            max-width: 300px;
+        }
+        .debug-log {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #0f172a;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Debug Info -->
+    <div class="debug-info">
+        <strong>🐛 Debug Navigation</strong>
+        <div>Section actuelle: <span id="currentSectionDebug">dashboard</span></div>
+        <div>Dernière action: <span id="lastActionDebug">Initialisation</span></div>
+        <div class="debug-log" id="debugLog"></div>
+    </div>
+
+    <!-- Sidebar simplifiée -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
+                <h2>MeRecharge</h2>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#users" class="nav-link" data-section="users">
+                        <i class="fas fa-users"></i>
+                        <span>Utilisateurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#transactions" class="nav-link" data-section="transactions">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transactions</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="main-header">
+            <div class="header-left">
+                <h1 class="page-title">Test Navigation</h1>
+            </div>
+        </header>
+
+        <main class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <h2>📊 Dashboard</h2>
+                <p>Ceci est la section Dashboard</p>
+                <button onclick="testDirectNavigation()">🔄 Test Navigation Directe</button>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users-section" class="content-section">
+                <h2>👥 Utilisateurs</h2>
+                <p>Ceci est la section Utilisateurs</p>
+                
+                <!-- Table des utilisateurs simplifiée -->
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td>Jean Dupont</td>
+                            <td>jean@example.com</td>
+                            <td><span class="badge badge-success">Actif</span></td>
+                            <td><button class="btn btn-sm btn-primary">Voir</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Transactions Section -->
+            <section id="transactions-section" class="content-section">
+                <h2>💰 Transactions</h2>
+                <p>Ceci est la section Transactions</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let currentSection = 'dashboard';
+        
+        function log(message) {
+            const debugLog = document.getElementById('debugLog');
+            const time = new Date().toLocaleTimeString();
+            debugLog.innerHTML += `<div>[${time}] ${message}</div>`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+            
+            document.getElementById('lastActionDebug').textContent = message;
+            console.log('🐛', message);
+        }
+        
+        function updateDebugInfo() {
+            document.getElementById('currentSectionDebug').textContent = currentSection;
+        }
+        
+        function switchSection(sectionId) {
+            log(`🔄 Changement vers: ${sectionId}`);
+            
+            // Cacher toutes les sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+                log(`🚫 Section cachée: ${section.id}`);
+            });
+            
+            // Mapper les IDs
+            const sectionMapping = {
+                'dashboard': 'dashboard-section',
+                'users': 'users-section',
+                'transactions': 'transactions-section'
+            };
+            
+            const targetSectionId = sectionMapping[sectionId] || sectionId + '-section';
+            const targetSection = document.getElementById(targetSectionId);
+            
+            if (targetSection) {
+                targetSection.classList.add('active');
+                log(`✅ Section activée: ${targetSectionId}`);
+                currentSection = sectionId;
+                updateDebugInfo();
+            } else {
+                log(`❌ Section introuvable: ${targetSectionId}`);
+            }
+        }
+        
+        function handleNavigation(e) {
+            e.preventDefault();
+            const sectionId = this.dataset.section;
+            log(`📍 Clic navigation: ${sectionId}`);
+            
+            if (sectionId) {
+                switchSection(sectionId);
+                
+                // Mettre à jour les liens actifs
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                log(`🎯 Navigation terminée vers: ${sectionId}`);
+            }
+        }
+        
+        function testDirectNavigation() {
+            log('🧪 Test navigation directe vers Utilisateurs');
+            switchSection('users');
+            
+            // Mettre à jour le lien actif
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === 'users') {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Configuration des event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 DOM chargé, configuration des event listeners');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', handleNavigation);
+                log(`📝 Listener ajouté pour: ${link.dataset.section}`);
+            });
+            
+            log('✅ Configuration terminée');
+            updateDebugInfo();
+            
+            // Test automatique après 3 secondes
+            setTimeout(() => {
+                log('🤖 Test automatique de navigation');
+                testDirectNavigation();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

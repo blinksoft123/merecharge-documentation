@@ -1,0 +1,33 @@
+<nav class="navbar">
+    <div class="navbar-brand">
+        <i class="fas fa-chart-line me-2"></i>
+        Dashboard
+    </div>
+    
+    <div class="navbar-nav">
+        <!-- Barre de recherche -->
+        <div class="navbar-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher..." class="form-control">
+        </div>
+        
+        <!-- Notifications -->
+        <div class="navbar-item">
+            <button class="btn btn-outline-primary position-relative">
+                <i class="fas fa-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    3
+                </span>
+            </button>
+        </div>
+        
+        <!-- Profil utilisateur -->
+        <div class="navbar-user dropdown">
+            <div class="user-avatar"><%= user && user.username ? user.username.charAt(0).toUpperCase() : 'A' %></div>
+            <div class="user-info">
+                <div class="user-name"><%= user && user.username ? user.username : 'Admin' %></div>
+                <div class="user-role">Administrateur</div>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Règle pour la collection de test
+    match /test/{document=**} {
+      allow read, write: if true;
+    }
+    
+    // Règles pour les utilisateurs
+    match /users/{userId} {
+      // L'utilisateur peut lire et écrire ses propres données
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Les admins peuvent tout lire
+      allow read: if request.auth != null && 
+                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Règles pour les transactions
+    match /transactions/{transactionId} {
+      // L'utilisateur peut lire ses propres transactions
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // L'utilisateur peut créer ses propres transactions
+      allow create: if request.auth != null && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Les admins peuvent tout lire
+      allow read: if request.auth != null && 
+                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Règles pour les commandes (boutique)
+    match /orders/{orderId} {
+      // L'utilisateur peut lire ses propres commandes
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // L'utilisateur peut créer ses propres commandes
+      allow create: if request.auth != null && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Les admins peuvent tout lire et modifier
+      allow read, write: if request.auth != null && 
+                            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Règles pour les produits
+    match /products/{productId} {
+      // Tout le monde peut lire les produits
+      allow read: if true;
+      
+      // Seuls les admins peuvent créer/modifier/supprimer
+      allow write: if request.auth != null && 
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Règles pour les notifications
+    match /notifications/{notificationId} {
+      // L'utilisateur peut lire ses propres notifications
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // Seuls les admins peuvent créer des notifications
+      allow create: if request.auth != null && 
+                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Par défaut, bloquer tout accès
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

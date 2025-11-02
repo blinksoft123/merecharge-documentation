@@ -1,0 +1,545 @@
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestion des Services MeRecharge</h1>
+            <p class="page-subtitle">Vue d'ensemble et gestion des services de transaction</p>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="date-navigation">
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="current-date" id="currentDate"></span>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="view-toggle">
+                <button class="btn btn-primary btn-sm active">Services</button>
+                <button class="btn btn-outline-primary btn-sm">Transactions</button>
+            </div>
+            <button class="btn btn-success" onclick="refreshStats()">
+                <i class="fas fa-sync me-2"></i>Actualiser
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><%= stats.totalUsers.toLocaleString() %></div>
+                <div class="stat-label">Utilisateurs Actifs</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div class="stat-icon success">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><%= stats.totalTransactions.toLocaleString() %></div>
+                <div class="stat-label">Total Transactions</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card warning">
+                <div class="stat-header">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><%= stats.totalRevenue.toLocaleString() %></div>
+                <div class="stat-label">Revenus (FCFA)</div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card info">
+                <div class="stat-header">
+                    <div class="stat-icon info">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><%= stats.totalUserBalance.toLocaleString() %></div>
+                <div class="stat-label">Solde Total (FCFA)</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Deuxième rangée de statistiques -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card danger">
+                <div class="stat-header">
+                    <div class="stat-icon danger">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><%= stats.pendingTransactions.toLocaleString() %></div>
+                <div class="stat-label">En Attente</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Header -->
+    <div class="timeline-header">
+        <div class="timeline-title">
+            <div class="services-label">Services Disponibles</div>
+        </div>
+        <div class="service-controls">
+            <button class="btn btn-sm btn-outline-success me-2" onclick="toggleAllServices(true)">
+                <i class="fas fa-check me-1"></i>Activer Tout
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="toggleAllServices(false)">
+                <i class="fas fa-times me-1"></i>Désactiver Tout
+            </button>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="row">
+        <% services.forEach((service, index) => { %>
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="service-card" data-service-id="<%= service.id %>">
+                <div class="service-card-header">
+                    <div class="service-icon-wrapper">
+                        <div class="service-icon <%= service.color %>">
+                            <i class="<%= service.icon %>"></i>
+                        </div>
+                        <div class="service-toggle-mini">
+                            <label class="switch">
+                                <input type="checkbox" <%= service.isActive ? 'checked' : '' %> onchange="toggleService('<%= service.id %>', this)">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-menu-mini">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="editService('<%= service.id %>')">
+                                    <i class="fas fa-edit me-2"></i>Modifier
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="viewServiceStats('<%= service.id %>')">
+                                    <i class="fas fa-chart-bar me-2"></i>Statistiques
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteService('<%= service.id %>')">
+                                    <i class="fas fa-trash me-2"></i>Supprimer
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card-body">
+                    <h5 class="service-name"><%= service.displayName %></h5>
+                    <div class="service-status <%= service.isActive ? 'active' : 'inactive' %>">
+                        <% if (service.isActive) { %>
+                            <i class="fas fa-circle text-success me-1"></i>Actif
+                        <% } else { %>
+                            <i class="fas fa-circle text-danger me-1"></i>Inactif
+                        <% } %>
+                        • <%= service.provider %>
+                    </div>
+                    <div class="service-limits">
+                        <small class="text-muted">
+                            <%= service.minAmount ? service.minAmount.toLocaleString() : 0 %> - <%= service.maxAmount ? service.maxAmount.toLocaleString() : 0 %> FCFA
+                        </small>
+                    </div>
+                    <div class="service-fees">
+                        <span class="badge bg-light text-dark">Frais: <%= (service.fees * 100).toFixed(2) %>%</span>
+                    </div>
+                </div>
+                
+                <div class="service-card-footer">
+                    <div class="service-stats-grid">
+                        <div class="stat-mini">
+                            <div class="value"><%= service.totalTransactions || 0 %></div>
+                            <div class="label">Transactions</div>
+                        </div>
+                        <div class="stat-mini">
+                            <div class="value"><%= (service.totalRevenue || 0).toLocaleString() %></div>
+                            <div class="label">Revenus (FCFA)</div>
+                        </div>
+                    </div>
+                    <% if (service.lastUsed) { %>
+                    <div class="last-used">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            Utilisé: <%= new Date(service.lastUsed).toLocaleDateString('fr-FR') %>
+                        </small>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+
+    <!-- Transactions récentes -->
+    <% if (recentTransactions && recentTransactions.length > 0) { %>
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-clock me-2"></i>
+                        Transactions Récentes
+                    </h5>
+                    <a href="/transactions" class="btn btn-primary btn-sm">
+                        <i class="fas fa-arrow-right me-2"></i>Voir toutes
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Service</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentTransactions.forEach(transaction => { %>
+                                <tr>
+                                    <td><code><%= transaction.transactionId %></code></td>
+                                    <td>
+                                        <% if (transaction.service) { %>
+                                            <span class="badge badge-<%= transaction.service.color %>">
+                                                <i class="<%= transaction.service.icon %> me-1"></i>
+                                                <%= transaction.service.displayName %>
+                                            </span>
+                                        <% } else { %>
+                                            <span class="badge badge-secondary">Service inconnu</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="fw-bold"><%= parseFloat(transaction.totalAmount).toLocaleString() %> FCFA</td>
+                                    <td>
+                                        <span class="badge badge-<%= transaction.status === 'success' ? 'success' : transaction.status === 'pending' ? 'warning' : 'danger' %>">
+                                            <%= transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1) %>
+                                        </span>
+                                    </td>
+                                    <td><%= transaction.createdAt.toLocaleDateString('fr-FR') %></td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    
+    <!-- Utilisateurs récents avec soldes -->
+    <% if (recentUsers && recentUsers.length > 0) { %>
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-users me-2"></i>
+                        Utilisateurs Actifs - Soldes Wallet
+                    </h5>
+                    <a href="/users" class="btn btn-primary btn-sm">
+                        <i class="fas fa-arrow-right me-2"></i>Voir tous
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Utilisateur</th>
+                                    <th>Téléphone</th>
+                                    <th>Solde Wallet</th>
+                                    <th>Statut</th>
+                                    <th>Dernière connexion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentUsers.forEach(user => { %>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-avatar me-2">
+                                                <i class="fas fa-user-circle text-primary" style="font-size: 2rem;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold"><%= user.firstName %> <%= user.lastName %></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><code><%= user.phone %></code></td>
+                                    <td>
+                                        <div class="fw-bold text-success" style="font-size: 1.1rem;">
+                                            <%= parseFloat(user.balance).toLocaleString() %> <small class="text-muted">FCFA</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-<%= user.status === 'active' ? 'success' : user.status === 'suspended' ? 'warning' : 'danger' %>">
+                                            <%= user.status === 'active' ? 'Actif' : user.status === 'suspended' ? 'Suspendu' : 'Bloqué' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (user.lastLoginAt) { %>
+                                            <%= new Date(user.lastLoginAt).toLocaleDateString('fr-FR') %>
+                                            <br><small class="text-muted"><%= new Date(user.lastLoginAt).toLocaleTimeString('fr-FR') %></small>
+                                        <% } else { %>
+                                            <span class="text-muted">Jamais connecté</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Solde total de tous les utilisateurs: <strong><%= stats.totalUserBalance.toLocaleString() %> FCFA</strong>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<style>
+/* Switch Toggle pour les services */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--gray-300);
+  transition: var(--transition-fast);
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: var(--transition-fast);
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--success);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Service Actions */
+.service-actions {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 20px;
+}
+
+.service-stats {
+  display: flex;
+  gap: 15px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item strong {
+  display: block;
+  font-size: 14px;
+  color: var(--gray-900);
+}
+
+.stat-item small {
+  font-size: 11px;
+  color: var(--gray-500);
+}
+
+.service-controls {
+  display: flex;
+  align-items: center;
+}
+
+.service-meta {
+  margin-top: 4px;
+}
+
+/* Responsive service row */
+.service-row {
+  display: flex;
+  border-bottom: 1px solid var(--gray-100);
+  min-height: 90px;
+  position: relative;
+}
+
+.service-row:last-child {
+  border-bottom: none;
+}
+
+.service-info {
+  width: 350px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gray-25);
+  border-right: 1px solid var(--gray-200);
+}
+
+@media (max-width: 768px) {
+  .service-row {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .service-info {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  
+  .service-actions {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  .service-stats {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+</style>
+
+<script>
+// Afficher la date actuelle
+document.addEventListener('DOMContentLoaded', function() {
+  const today = new Date();
+  document.getElementById('currentDate').textContent = today.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+});
+
+// Fonction pour activer/désactiver un service
+async function toggleService(serviceId, checkbox) {
+  const originalState = checkbox.checked;
+  
+  try {
+    const response = await fetch(`/dashboard/service/${serviceId}/toggle`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // Mettre à jour l'interface
+      const serviceRow = document.querySelector(`[data-service-id="${serviceId}"]`);
+      const statusElement = serviceRow.querySelector('.service-status');
+      
+      if (result.isActive) {
+        statusElement.innerHTML = '<i class="fas fa-circle text-success me-1"></i>Actif • ' + statusElement.textContent.split(' • ')[1];
+        statusElement.className = 'service-status active';
+      } else {
+        statusElement.innerHTML = '<i class="fas fa-circle text-danger me-1"></i>Inactif • ' + statusElement.textContent.split(' • ')[1];
+        statusElement.className = 'service-status inactive';
+      }
+      
+      showToast(result.message, 'success');
+    } else {
+      // Remettre l'état original en cas d'erreur
+      checkbox.checked = !originalState;
+      showToast(result.message || 'Erreur lors de la modification du service', 'danger');
+    }
+  } catch (error) {
+    // Remettre l'état original en cas d'erreur
+    checkbox.checked = !originalState;
+    showToast('Erreur de connexion', 'danger');
+  }
+}
+
+// Fonction pour activer/désactiver tous les services
+function toggleAllServices(activate) {
+  const checkboxes = document.querySelectorAll('.switch input[type="checkbox"]');
+  const confirmMessage = activate ? 'Activer tous les services?' : 'Désactiver tous les services?';
+  
+  if (confirm(confirmMessage)) {
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked !== activate) {
+        checkbox.click();
+      }
+    });
+  }
+}
+
+// Autres fonctions de gestion
+function editService(serviceId) {
+  showToast('Fonctionnalité de modification à implémenter', 'info');
+}
+
+function viewServiceStats(serviceId) {
+  showToast('Statistiques du service à implémenter', 'info');
+}
+
+function deleteService(serviceId) {
+  if (confirm('Êtes-vous sûr de vouloir supprimer ce service?')) {
+    showToast('Fonction de suppression à implémenter', 'warning');
+  }
+}
+
+function refreshStats() {
+  showToast('Actualisation des données...', 'info');
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
+}
+</script>

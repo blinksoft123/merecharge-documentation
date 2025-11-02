@@ -1,0 +1,54 @@
+<div class="auth-card">
+    <div class="card-header">
+        <h3><i class="fas fa-mobile-alt me-2"></i>MeRecharge Admin</h3>
+        <p class="text-muted">Connectez-vous à votre compte administrateur</p>
+    </div>
+    
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+    
+    <% if (typeof locals.success !== 'undefined' && locals.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= locals.success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/login">
+        <input type="hidden" name="redirect" value="<%= redirect || '/dashboard' %>">
+        
+        <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur ou Email</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+            </button>
+        </div>
+    </form>
+    
+    <hr class="my-4">
+    
+    <div class="text-center">
+        <small class="text-muted">
+            Compte par défaut: <strong>admin</strong> / <strong>password</strong>
+        </small>
+    </div>
+    
+    <div class="text-center mt-2">
+        <a href="/create-admin" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-user-plus me-1"></i>Créer un compte admin
+        </a>
+    </div>
+</div>
