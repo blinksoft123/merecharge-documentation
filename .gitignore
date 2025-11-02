@@ -1,0 +1,39 @@
+# Node modules
+**/node_modules/
+**/package-lock.json
+
+# Flutter/Dart
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+
+# IDE
+**/.idea/
+**/.vscode/
+*.swp
+*.swo
+**/.DS_Store
+
+# Logs
+**/logs/
+*.log
+
+# Environment variables
+**/.env
+**/.env.local
+
+# Build artifacts
+**/dist/
+**/out/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large APK files (optional - vous pouvez les garder)
+# *.apk
+
+# Temporary files
+**/*.tmp
+**/.vercel/
